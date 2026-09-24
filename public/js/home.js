@@ -7,6 +7,7 @@
   }
 
   const logoutBtn = document.getElementById("logout-btn");
+  const adminBtn = document.getElementById("admin-btn");
   const newMailBtn = document.getElementById("new-mail-btn");
   const mailList = document.getElementById("mail-list");
   const accountInitial = document.getElementById("account-initial");
@@ -27,12 +28,16 @@
     mailList.innerHTML = "";
     mails.forEach((mail) => {
       const li = document.createElement("li");
-      const initial = (mail.mailInput || "?").trim().charAt(0).toUpperCase() || "?";
-      li.innerHTML = '<span class="mail-avatar">' + initial + "</span><span>" + (mail.mailInput.length > 28
-        ? mail.mailInput.slice(0, 28) + "..."
-        : mail.mailInput) + "</span>";
+      li.textContent = mail.mailInput.length > 28 ? mail.mailInput.slice(0, 28) + "..." : mail.mailInput;
+      li.addEventListener("click", () => loadMailFromHistory(mail));
       mailList.appendChild(li);
     });
+  }
+
+  function loadMailFromHistory(mail) {
+    mailInput.value = mail.mailInput;
+    mailOutput.value = mail.mailOutput;
+    checkMessage.textContent = "Loaded from history.";
   }
 
   async function loadHome() {
@@ -55,6 +60,7 @@
       accountName.textContent = data.user.firstname + " " + data.user.lastname;
       accountBalance.textContent = "Balance: " + data.user.balance.toFixed(2);
       accountInitial.textContent = (data.user.firstname || "?").charAt(0).toUpperCase();
+      adminBtn.hidden = data.user.role !== "ADMIN";
 
       renderMailList(data.mails);
     } catch (err) {
@@ -91,6 +97,14 @@
 
       mailOutput.value = data.message;
       checkMessage.textContent = "Check complete.";
+
+      if (typeof data.balance === "number") {
+        accountBalance.textContent = "Balance: " + data.balance.toFixed(2);
+      }
+
+      if (Array.isArray(data.mails)) {
+        renderMailList(data.mails);
+      }
     } catch (err) {
       checkMessage.textContent = "Unable to reach the server. Please try again.";
     }
@@ -115,6 +129,9 @@
   }
 
   logoutBtn.addEventListener("click", logout);
+  adminBtn.addEventListener("click", () => {
+    window.location.href = "/admin.html";
+  });
   checkBtn.addEventListener("click", checkMail);
   newMailBtn.addEventListener("click", newMail);
   copyBtn.addEventListener("click", copyOutput);

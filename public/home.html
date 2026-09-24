@@ -13,7 +13,10 @@
         <span class="logo-mark">MR</span>
         <span>mail-right</span>
       </div>
-      <button id="logout-btn" type="button">Log out</button>
+      <div class="topbar-actions">
+        <button id="admin-btn" type="button" class="btn-icon" title="Admin" hidden>⚙️</button>
+        <button id="logout-btn" type="button">Log out</button>
+      </div>
     </header>
 
     <div class="body-shell">
@@ -41,10 +44,12 @@
             <div class="check-message" id="check-message"></div>
           </div>
           <div class="field">
-            <label for="mail-output">Mail output</label>
+            <div class="field-header">
+              <label for="mail-output">Mail output</label>
+              <button class="btn-copy" type="button" id="copy-btn">Copy to clipboard</button>
+            </div>
             <textarea id="mail-output" placeholder="The improved mail will be described here..." readonly></textarea>
           </div>
-          <button class="btn-copy" type="button" id="copy-btn">Copy to clipboard</button>
         </div>
       </main>
     </div>

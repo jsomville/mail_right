@@ -29,6 +29,14 @@ export class NotFoundError extends AppError {
   }
 }
 
+export class ForbiddenError extends AppError {
+  constructor(message = "Forbidden") {
+    super(message, 403, "FORBIDDEN");
+    this.name = "ForbiddenError";
+    Object.setPrototypeOf(this, ForbiddenError.prototype);
+  }
+}
+
 export class BadRequestError extends AppError {
   constructor(message = "Bad request") {
     super(message, 400, "BAD_REQUEST");

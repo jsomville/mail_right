@@ -2,7 +2,7 @@ import jwt from "@fastify/jwt";
 import fp from "fastify-plugin";
 import type { FastifyInstance } from "fastify";
 import { env } from "../config/env";
-import { authenticate } from "../middleware/authenticate";
+import { authenticate, requireAdmin } from "../middleware/authenticate";
 
 export default fp(async function jwtPlugin(fastify: FastifyInstance) {
   await fastify.register(jwt, {
@@ -11,4 +11,5 @@ export default fp(async function jwtPlugin(fastify: FastifyInstance) {
   });
 
   fastify.decorate("authenticate", authenticate);
+  fastify.decorate("requireAdmin", requireAdmin);
 });

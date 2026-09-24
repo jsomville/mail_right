@@ -1,0 +1,44 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>mail-right | Admin</title>
+  <link rel="stylesheet" href="/css/style.css" />
+</head>
+<body>
+  <div class="app-shell">
+    <header class="topbar">
+      <div class="brand">
+        <span class="logo-mark">MR</span>
+        <span>mail-right admin</span>
+      </div>
+      <div class="topbar-actions">
+        <button id="back-btn" type="button" class="btn-icon" title="Back to app">←</button>
+        <button id="logout-btn" type="button">Log out</button>
+      </div>
+    </header>
+
+    <div class="body-shell">
+      <main class="content">
+        <h1>Mail check history</h1>
+        <div class="admin-message" id="admin-message"></div>
+        <div class="admin-summary" id="admin-summary"></div>
+        <table class="admin-table">
+          <thead>
+            <tr>
+              <th>Date/time</th>
+              <th>User</th>
+              <th>Input tokens</th>
+              <th>Output tokens</th>
+              <th>Cost</th>
+            </tr>
+          </thead>
+          <tbody id="admin-table-body"></tbody>
+        </table>
+      </main>
+    </div>
+  </div>
+  <script src="/js/admin.js"></script>
+</body>
+</html>

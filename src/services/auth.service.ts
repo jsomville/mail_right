@@ -3,6 +3,7 @@ import type { FastifyInstance } from "fastify";
 import { UnauthorizedError } from "../errors/app-error";
 import type { UserRepository } from "../repositories/user.repository";
 import type { LoginBody, LoginResponse } from "../schemas/auth.schema";
+import type { Role } from "../types";
 
 export class AuthService {
   constructor(
@@ -21,7 +22,8 @@ export class AuthService {
       throw new UnauthorizedError("Invalid email or password");
     }
 
-    const token = this.jwtSign({ sub: user.id, email: user.email });
+    const role = user.role as Role;
+    const token = this.jwtSign({ sub: user.id, email: user.email, role });
 
     return {
       token,
@@ -31,6 +33,7 @@ export class AuthService {
         firstname: user.firstname,
         lastname: user.lastname,
         balance: user.balance,
+        role,
       },
     };
   }

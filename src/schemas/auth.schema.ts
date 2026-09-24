@@ -15,6 +15,7 @@ export const loginResponseSchema = z.object({
     firstname: z.string(),
     lastname: z.string(),
     balance: z.number(),
+    role: z.enum(["USER", "ADMIN"]),
   }),
 });
 

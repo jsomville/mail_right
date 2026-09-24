@@ -78,6 +78,7 @@ See [.env.example](.env.example):
 | `DATABASE_URL`    | Prisma datasource URL                          |
 | `JWT_SECRET`      | Secret used to sign/verify JWTs (never commit) |
 | `JWT_EXPIRES_IN`  | Token lifetime, e.g. `1h`                      |
+| `MAX_MAIL_HISTORY`| Max past check operations kept per user (older ones are pruned) |
 
 Secrets are never hard-coded and are never logged (request logs redact the
 `Authorization` header and `password` fields).
@@ -145,6 +146,24 @@ curl -G http://localhost:3000/api/check \
 { "message": "Your mail has been reviewed. It looks good to send!" }
 ```
 
+Each check call records prompt/completion token counts and the credit cost
+reported by OpenRouter's usage accounting on the saved `Mail` row, and
+deducts that cost from the user's `balance` immediately.
+
+### Admin mail history (protected, admin role only)
+
+```bash
+curl http://localhost:3000/api/admin/mails \
+  -H "Authorization: Bearer <admin-token>"
+```
+
+Returns every user's check history (date/time, input/output tokens, cost per
+check) across the whole system, most recent first. Requires a user with
+`role="ADMIN"`; non-admins get `403 Forbidden`. The seeded admin account is
+`admin@mail-right.com` / `AdminPassword123!`. Signed-in admins see a gear
+button next to "Log out" that opens `/admin.html`, which also shows the
+summed total cost across all checks.
+
 ## Testing
 
 Tests run against an isolated SQLite database configured via [.env.test](.env.test)
@@ -159,6 +178,7 @@ Covers:
 - Successful login, invalid email/password, malformed login payload
 - `GET /api/home` with a valid token, missing token, and invalid token
 - `GET /api/check` with valid/missing query parameters and missing token
+- `GET /api/admin/mails` with an admin token, a non-admin token (403), and no token
 - `AuthService` unit tests (valid credentials, unknown user, wrong password)
 - Logout behavior of the sample UI (`public/js/home.js`) via JSDOM
 

@@ -23,3 +23,25 @@ export async function createTestUser(app: FastifyInstance): Promise<User> {
     },
   });
 }
+
+export const TEST_ADMIN = {
+  email: "test.admin@mail-right.com",
+  password: "Sup3rSecret!",
+  firstname: "Test",
+  lastname: "Admin",
+};
+
+export async function createTestAdmin(app: FastifyInstance): Promise<User> {
+  const passwordHash = await bcrypt.hash(TEST_ADMIN.password, 4);
+
+  return app.prisma.user.create({
+    data: {
+      email: TEST_ADMIN.email,
+      passwordHash,
+      firstname: TEST_ADMIN.firstname,
+      lastname: TEST_ADMIN.lastname,
+      balance: 0,
+      role: "ADMIN",
+    },
+  });
+}

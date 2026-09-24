@@ -14,6 +14,7 @@ function buildStoredUser(passwordHash: string): User {
     firstname: "A",
     lastname: "B",
     balance: 10,
+    role: "USER",
     createdAt: new Date(),
     updatedAt: new Date(),
   };

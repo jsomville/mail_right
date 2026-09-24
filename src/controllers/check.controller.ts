@@ -7,7 +7,7 @@ export class CheckController {
 
   check = async (request: FastifyRequest, reply: FastifyReply): Promise<void> => {
     const query = checkQuerySchema.parse(request.query);
-    const result = await this.checkService.check(query);
+    const result = await this.checkService.check(request.user.sub, query);
     reply.code(200).send(result);
   };
 }
