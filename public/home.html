@@ -1,0 +1,54 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>mail-right | Home</title>
+  <link rel="stylesheet" href="/css/style.css" />
+</head>
+<body>
+  <div class="app-shell">
+    <header class="topbar">
+      <div class="brand">
+        <span class="logo-mark">MR</span>
+        <span>mail-right</span>
+      </div>
+      <button id="logout-btn" type="button">Log out</button>
+    </header>
+
+    <div class="body-shell">
+      <aside class="sidebar">
+        <button class="btn-new-mail" type="button" id="new-mail-btn">+ New mail</button>
+        <ul class="mail-list" id="mail-list"></ul>
+        <div class="account-info">
+          <div class="account-avatar" id="account-initial">?</div>
+          <div class="account-details">
+            <span id="account-name">Loading...</span>
+            <span class="balance" id="account-balance"></span>
+          </div>
+        </div>
+      </aside>
+
+      <main class="content">
+        <h1>New mail</h1>
+        <div class="mail-form">
+          <div class="field">
+            <label for="mail-input">Mail input</label>
+            <textarea id="mail-input" placeholder="Write or paste the original mail here..."></textarea>
+          </div>
+          <div class="check-actions">
+            <button class="btn-check" type="button" id="check-btn">Check</button>
+            <div class="check-message" id="check-message"></div>
+          </div>
+          <div class="field">
+            <label for="mail-output">Mail output</label>
+            <textarea id="mail-output" placeholder="The improved mail will be described here..." readonly></textarea>
+          </div>
+          <button class="btn-copy" type="button" id="copy-btn">Copy to clipboard</button>
+        </div>
+      </main>
+    </div>
+  </div>
+  <script src="/js/home.js"></script>
+</body>
+</html>
