@@ -1,15 +1,13 @@
 import type { FastifyInstance } from "fastify";
-import { env } from "../config/env";
-import { CheckController } from "../controllers/check.controller";
-import { MailRepository } from "../repositories/mail.repository";
-import { UserRepository } from "../repositories/user.repository";
+import { checkQuerySchema } from "../schemas/check.schema";
 import { CheckService } from "../services/check.service";
 
 export default async function checkRoutes(fastify: FastifyInstance): Promise<void> {
-  const mailRepository = new MailRepository(fastify.prisma);
-  const userRepository = new UserRepository(fastify.prisma);
-  const checkService = new CheckService(mailRepository, userRepository, env.MAX_MAIL_HISTORY);
-  const checkController = new CheckController(checkService);
+  const checkService = new CheckService();
 
-  fastify.get("/check", { preHandler: fastify.authenticate }, checkController.check);
+  fastify.get("/check", async (request, reply) => {
+    const query = checkQuerySchema.parse(request.query);
+    const result = await checkService.check(query);
+    reply.code(200).send(result);
+  });
 }

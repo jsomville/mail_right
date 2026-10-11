@@ -3,28 +3,71 @@
 <head>
   <meta charset="UTF-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-  <title>mail-right | Login</title>
+  <title>mail-right</title>
   <link rel="stylesheet" href="/css/style.css" />
+  <script>
+    // Apply the theme before first paint to avoid a light/dark flash.
+    (function () {
+      var theme = null;
+      try { theme = localStorage.getItem("theme"); } catch (e) {}
+      if (theme !== "light" && theme !== "dark") {
+        theme = window.matchMedia("(prefers-color-scheme: dark)").matches ? "dark" : "light";
+      }
+      document.documentElement.setAttribute("data-theme", theme);
+    })();
+  </script>
 </head>
-<body class="login-page">
-  <div class="login-card">
-    <div class="login-logo">
-      <span class="logo-mark">MR</span>
-      <span>mail-right</span>
-    </div>
-    <form id="login-form" novalidate>
-      <div class="field">
-        <label for="email">Email</label>
-        <input type="email" id="email" name="email" autocomplete="username" required />
+<body>
+  <div class="app-shell">
+    <header class="topbar">
+      <div class="brand">
+        <span class="logo-mark">MR</span>
+        <span>mail-right</span>
       </div>
-      <div class="field">
-        <label for="password">Password</label>
-        <input type="password" id="password" name="password" autocomplete="current-password" required />
+      <div class="topbar-actions">
+        <button id="theme-btn" type="button" class="btn-theme" title="Toggle dark mode" aria-label="Toggle dark mode">
+          <!-- Lucide "moon" icon (https://lucide.dev/icons/moon) -->
+          <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true" class="icon-moon"><path d="M12 3a6 6 0 0 0 9 9 9 9 0 1 1-9-9Z"/></svg>
+          <!-- Lucide "sun" icon (https://lucide.dev/icons/sun) -->
+          <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true" class="icon-sun"><circle cx="12" cy="12" r="4"/><path d="M12 2v2"/><path d="M12 20v2"/><path d="m4.93 4.93 1.41 1.41"/><path d="m17.66 17.66 1.41 1.41"/><path d="M2 12h2"/><path d="M20 12h2"/><path d="m6.34 17.66-1.41 1.41"/><path d="m19.07 4.93-1.41 1.41"/></svg>
+        </button>
+        <button id="new-mail-btn" type="button" class="btn-secondary">
+          <!-- Lucide "mail-plus" icon (https://lucide.dev/icons/mail-plus) -->
+          <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M22 13V6a2 2 0 0 0-2-2H4a2 2 0 0 0-2 2v12c0 1.1.9 2 2 2h8"/><path d="m22 7-8.97 5.7a1.94 1.94 0 0 1-2.06 0L2 7"/><path d="M19 16v6"/><path d="M16 19h6"/></svg>
+          New mail
+        </button>
       </div>
-      <button type="submit" class="btn-primary">Log in</button>
-      <div class="form-error" id="form-error" role="alert"></div>
-    </form>
+    </header>
+
+    <main class="content">
+      <div class="mail-card">
+        <div class="mail-toolbar">
+          <div class="tabs" role="tablist" aria-label="Mail version">
+            <button class="tab" type="button" role="tab" id="tab-original" aria-controls="panel-original" aria-selected="true">Original</button>
+            <button class="tab" type="button" role="tab" id="tab-checked" aria-controls="panel-checked" aria-selected="false" tabindex="-1">Checked</button>
+          </div>
+          <div class="mail-actions">
+            <button class="btn-check" type="button" id="check-btn">
+              <!-- Lucide "mail-check" icon (https://lucide.dev/icons/mail-check) -->
+              <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M22 13V6a2 2 0 0 0-2-2H4a2 2 0 0 0-2 2v12c0 1.1.9 2 2 2h8"/><path d="m22 7-8.97 5.7a1.94 1.94 0 0 1-2.06 0L2 7"/><path d="m16 19 2 2 4-4"/></svg>
+              Check
+            </button>
+            <button class="btn-copy" type="button" id="copy-btn" title="Copy to clipboard" aria-label="Copy to clipboard">
+              <!-- Lucide "copy" icon (https://lucide.dev/icons/copy) -->
+              <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><rect width="14" height="14" x="8" y="8" rx="2" ry="2"/><path d="M4 16c-1.1 0-2-.9-2-2V4c0-1.1.9-2 2-2h10c1.1 0 2 .9 2 2"/></svg>
+            </button>
+          </div>
+        </div>
+        <div class="tab-panel" role="tabpanel" id="panel-original" aria-labelledby="tab-original">
+          <textarea id="mail-input" aria-label="Original mail" placeholder="Write or paste the original mail here..."></textarea>
+        </div>
+        <div class="tab-panel" role="tabpanel" id="panel-checked" aria-labelledby="tab-checked" hidden>
+          <textarea id="mail-output" aria-label="Checked mail" placeholder="The improved mail will appear here..." readonly></textarea>
+        </div>
+      </div>
+      <div class="check-message" id="check-message" role="status"></div>
+    </main>
   </div>
-  <script src="/js/login.js"></script>
+  <script src="/js/app.js"></script>
 </body>
 </html>

@@ -1,13 +1,11 @@
 {
   "extends": "./tsconfig.json",
-  "ts-node": {
-    "files": true
-  },
   "compilerOptions": {
     "rootDir": ".",
     "noUnusedLocals": false,
-    "noUnusedParameters": false
+    "noUnusedParameters": false,
+    "types": ["node", "mocha"]
   },
-  "include": ["src/**/*.ts", "test/**/*.ts", "prisma/seed.ts"],
+  "include": ["src/**/*.ts", "test/**/*.ts"],
   "exclude": ["node_modules", "dist"]
 }

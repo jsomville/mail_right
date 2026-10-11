@@ -1,7 +1,5 @@
-import { Prisma } from "@prisma/client";
 import type { FastifyError, FastifyReply, FastifyRequest } from "fastify";
 import { ZodError } from "zod";
-import { AppError } from "../errors/app-error";
 
 interface ErrorResponseBody {
   error: {
@@ -12,9 +10,8 @@ interface ErrorResponseBody {
 }
 
 /**
- * Central error handler: normalizes Zod validation errors, known AppErrors,
- * Prisma errors, and unexpected errors into a consistent JSON shape.
- * Never leaks internal error details for unexpected/5xx errors.
+ * Central error handler: normalizes Zod validation errors and unexpected errors
+ * into a consistent JSON shape. Never leaks internal error details for 5xx errors.
  */
 export function errorHandler(
   error: FastifyError | Error,
@@ -27,39 +24,6 @@ export function errorHandler(
         code: "VALIDATION_ERROR",
         message: "Request validation failed",
         details: error.flatten(),
-      },
-    };
-    reply.code(400).send(body);
-    return;
-  }
-
-  if (error instanceof AppError) {
-    const body: ErrorResponseBody = {
-      error: {
-        code: error.code,
-        message: error.expose ? error.message : "An error occurred",
-      },
-    };
-    reply.code(error.statusCode).send(body);
-    return;
-  }
-
-  if (error instanceof Prisma.PrismaClientKnownRequestError) {
-    const body: ErrorResponseBody = {
-      error: {
-        code: "DATABASE_ERROR",
-        message: "A database error occurred",
-      },
-    };
-    reply.code(409).send(body);
-    return;
-  }
-
-  if (error instanceof Prisma.PrismaClientValidationError) {
-    const body: ErrorResponseBody = {
-      error: {
-        code: "DATABASE_VALIDATION_ERROR",
-        message: "Invalid database query",
       },
     };
     reply.code(400).send(body);
