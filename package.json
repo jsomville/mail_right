@@ -21,11 +21,11 @@
     "zod": "^4.6.5"
   },
   "devDependencies": {
-    "@types/chai": "^4.3.19",
+    "@types/chai": "^5.2.3",
     "@types/mocha": "^10.0.7",
-    "@types/node": "^24.13.6",
+    "@types/node": "^26.6.5",
     "@types/supertest": "^7.2.1",
-    "chai": "^4.5.0",
+    "chai": "^6.3.0",
     "cross-env": "^10.1.0",
     "dotenv-cli": "^11.0.0",
     "mocha": "^12.0.2",
